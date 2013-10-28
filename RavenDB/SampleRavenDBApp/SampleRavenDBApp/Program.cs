@@ -65,7 +65,13 @@ namespace SampleRavenDBApp
 				.Where(o => o.Freight > 2)
 				//.Where(o=>o.Freight<5)//are or'ed
 				//.Where(o => o.Freight > 2 && o.Freight<10)//to and conditions :)
-				.Take(10);
+				.Take(10)
+				.Select(o=>new {//returns just selected attributes to client :)
+				Employee = o.Employee,
+				Freight=o.Freight
+				})
+				.OfType<Order>();//just docs with raved type =Orders
+				;
 				session.Advanced.LuceneQuery<Order>().WhereEquals("","").WhereEquals("","")//expressions are or'ed
 				foreach (var order in query3)
 				{
