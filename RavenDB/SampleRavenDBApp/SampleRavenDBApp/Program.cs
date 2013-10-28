@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using Raven.Client.Document;
@@ -23,12 +24,24 @@ namespace SampleRavenDBApp
 				var p = session.Load<Product>("Product/1");
 				p.Description = "descr";
 				session.SaveChanges();
+
+				//prevents property initialisation
+				//prevents constructor execution
+				//used by Json.NET
+				var obj = FormatterServices.GetUninitializedObject(typeof(Product));
+				var obj2 = FormatterServices.GetUninitializedObject(typeof(IFoo));
+
 			}
 		}
 	}
+	public interface IFoo { }
+
 	public class Product
 	{
+		public Product()
+		{
 
+		}
 		//[JsonProperty(PropertyName = "bla")]
 		public string Id { get; private set; }
 		public string Description { get; set; }
