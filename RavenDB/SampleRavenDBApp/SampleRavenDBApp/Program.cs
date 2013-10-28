@@ -79,13 +79,17 @@ namespace SampleRavenDBApp
 					.SelectFields<OrderView>("Employee", "Freight")//good
 					;
 					//.WhereEquals("","")//expressions are or'ed
-				foreach (var order in query3)
-				{
-					var employee = session.Load<dynamic>(order.Employee);
-					//no roundtrip because employee data has already been loaded by query statement
-					Console.WriteLine(order.Employee);
+				//foreach (var order in query3)//bombs but why?
+				//{
+				//	var employee = session.Load<dynamic>(order.Employee);
+				//	//no roundtrip because employee data has already been loaded by query statement
+				//	Console.WriteLine(order.Employee);
 
-				}
+				//}
+				var query4 = session.Query<Employee>()
+					.Where(e => e.LastName.StartsWith("A"))
+					.ToList();//creates index :)
+
 			}
 		}
 	}
