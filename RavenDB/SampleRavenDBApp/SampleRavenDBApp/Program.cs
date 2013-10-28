@@ -15,7 +15,7 @@ namespace SampleRavenDBApp
 		{
 			var store = new DocumentStore()
 			{
-				Url = "localhost",
+				Url = "http://localhost:8080",
 				DefaultDatabase = "Northwind"
 			};
 			store.Initialize();
@@ -27,9 +27,9 @@ namespace SampleRavenDBApp
 
 				//prevents property initialisation
 				//prevents constructor execution
-				//used by Json.NET
-				var obj = FormatterServices.GetUninitializedObject(typeof(Product));
-				var obj2 = FormatterServices.GetUninitializedObject(typeof(IFoo));
+				//used by Json.NET if no parameterless constructor found!
+				//var obj = FormatterServices.GetUninitializedObject(typeof(Product));
+				//var obj2 = FormatterServices.GetUninitializedObject(typeof(IFoo));
 
 			}
 		}
