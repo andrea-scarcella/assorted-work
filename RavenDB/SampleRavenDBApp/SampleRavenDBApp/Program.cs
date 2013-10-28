@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using Orders;
+using Raven.Client;
 using Raven.Client.Document;
 using Raven.Imports.Newtonsoft.Json;
 
@@ -52,23 +53,25 @@ namespace SampleRavenDBApp
 				foreach (var order in query2)
 				{
 					Console.WriteLine(order.Employee);
-					
+
 				}
 				Console.WriteLine("*");
 				var query3 = session.Query<Order>()
-				.Customize(c => {
+				.Customize(c =>
+				{
 					//ducktyping example: server receives string:)
 					//load 100% employee data
 					c.Include<Order>(obj => obj.Employee);//same as c.Include("Employee") but better
 
 				})
 				.Where(o => o.Freight > 2)
-				//.Where(o=>o.Freight<5)//are or'ed
-				//.Where(o => o.Freight > 2 && o.Freight<10)//to and conditions :)
+					//.Where(o=>o.Freight<5)//are or'ed
+					//.Where(o => o.Freight > 2 && o.Freight<10)//to and conditions :)
 				.Take(10)
-				.Select(o=>new {//returns just selected attributes to client :)
-				Employee = o.Employee,
-				Freight=o.Freight
+				.Select(o => new
+				{//returns just selected attributes to client :)
+					Employee = o.Employee,
+					Freight = o.Freight
 				})
 				.OfType<Order>();//just docs with raved type =Orders
 				;
@@ -78,7 +81,7 @@ namespace SampleRavenDBApp
 					//.SelectFields<Order>("Employee", "Freight")//not good, resto of order properties are null
 					.SelectFields<OrderView>("Employee", "Freight")//good
 					;
-					//.WhereEquals("","")//expressions are or'ed
+				//.WhereEquals("","")//expressions are or'ed
 				//foreach (var order in query3)//bombs but why?
 				//{
 				//	var employee = session.Load<dynamic>(order.Employee);
@@ -86,15 +89,18 @@ namespace SampleRavenDBApp
 				//	Console.WriteLine(order.Employee);
 
 				//}
+				RavenQueryStatistics stats = null;
 				var query4 = session.Query<Employee>()
-					.Where(e => e.LastName.StartsWith("A"))
+					.Statistics(out stats)//gimme some statistics on my query!
+					.Where(e => e.FirstName.StartsWith("N"))
 					.ToList();//creates index :)
-
+				int u = 0;
 			}
 		}
 	}
 	public interface IFoo { }
-	class OrderView {
+	class OrderView
+	{
 		public string Employee { get; set; }
 		public decimal Freight { get; set; }
 	}
