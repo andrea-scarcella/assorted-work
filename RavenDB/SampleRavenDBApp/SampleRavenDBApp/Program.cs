@@ -92,7 +92,7 @@ namespace SampleRavenDBApp
 	public interface IFoo { }
 	class OrderView {
 		public string Employee { get; set; }
-		public string Freight { get; set; }
+		public decimal Freight { get; set; }
 	}
 	public class Product
 	{
