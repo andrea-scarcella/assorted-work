@@ -72,7 +72,13 @@ namespace SampleRavenDBApp
 				})
 				.OfType<Order>();//just docs with raved type =Orders
 				;
-				session.Advanced.LuceneQuery<Order>().WhereEquals("","").WhereEquals("","")//expressions are or'ed
+
+				session.Advanced.LuceneQuery<Order>()
+					.Where("Freight: [2 to 10]")
+					//.SelectFields<Order>("Employee", "Freight")//not good, resto of order properties are null
+					.SelectFields<OrderView>("Employee", "Freight")//good
+					;
+					//.WhereEquals("","")//expressions are or'ed
 				foreach (var order in query3)
 				{
 					var employee = session.Load<dynamic>(order.Employee);
@@ -84,7 +90,10 @@ namespace SampleRavenDBApp
 		}
 	}
 	public interface IFoo { }
-
+	class OrderView {
+		public string Employee { get; set; }
+		public string Freight { get; set; }
+	}
 	public class Product
 	{
 		public Product()
