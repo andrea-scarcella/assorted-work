@@ -94,7 +94,7 @@ namespace SampleRavenDBApp
 					//.Statistics(out stats)//gimme some statistics on my query!
 					.Where(e => e.Lastname.StartsWith("F"))
 					.Take(10);
-				//copies index into memory and locks it, prevents any modification to index
+				//copies index into memory and locks it, prevents any modification to index 
 				var enumerable = session.Advanced.Stream(query4);
 
 				while (enumerable.MoveNext())
