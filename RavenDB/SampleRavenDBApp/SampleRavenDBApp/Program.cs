@@ -91,9 +91,16 @@ namespace SampleRavenDBApp
 				//}
 				RavenQueryStatistics stats = null;
 				var query4 = session.Query<Employee>()
-					.Statistics(out stats)//gimme some statistics on my query!
-					.Where(e => e.FirstName.StartsWith("N"))
-					.ToList();//creates index :)
+					//.Statistics(out stats)//gimme some statistics on my query!
+					.Where(e => e.Lastname.StartsWith("F"))
+					.Take(10);
+				//copies index into memory and locks it, prevents any modification to index
+				var enumerable = session.Advanced.Stream(query4);
+
+				while (enumerable.MoveNext())
+				{
+					var emp.enumerable.Current();//server-side forward-only cursor!
+				}
 				int u = 0;
 			}
 		}
