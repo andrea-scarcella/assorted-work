@@ -25,6 +25,16 @@ namespace SampleRavenDBApp
 				p.Description = "descr";
 				session.SaveChanges();
 
+				//if id not initialised ===> generated on call to store
+				//if id preinitialised ==> actual value generated AFTER data has been saved to db
+				
+				//customise id generation
+				//s:key, commands:access db within current transaction
+				//var tag=store.Conventions.FindTypeTagName(type).ToCamelCase();
+				//tag+"/"+stuff+"/"+keygenerator.NextId()
+
+				//store.Conventions.RegisterIdconvention<Interface>((s,commands,obj)=>{ }
+				
 				//prevents property initialisation
 				//prevents constructor execution
 				//used by Json.NET if no parameterless constructor found!
