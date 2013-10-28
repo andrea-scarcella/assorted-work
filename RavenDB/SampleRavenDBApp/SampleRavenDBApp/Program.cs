@@ -91,9 +91,11 @@ namespace SampleRavenDBApp
 				//}
 				RavenQueryStatistics stats = null;
 				var query4 = session.Query<Employee>()
-					//.Statistics(out stats)//gimme some statistics on my query!
+					.Statistics(out stats)//gimme some statistics on my query!
 					.Where(e => e.Lastname.StartsWith("F"))
-					.Take(10);
+					.OrderBy(e=>e.FirstName)
+					.ThenBy(e=>e.LastName);//if sort by freight then generates new index! (freight is decimal therefore not string and therefore does not exist an idex that supports it)
+					//.Take(10);
 				//copies index into memory and locks it, prevents any modification to index 
 				var enumerable = session.Advanced.Stream(query4);
 
