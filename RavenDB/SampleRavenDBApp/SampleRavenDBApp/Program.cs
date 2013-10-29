@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using Orders;
 using Raven.Client;
 using Raven.Client.Document;
+using Raven.Client.Indexes;
 using Raven.Imports.Newtonsoft.Json;
 
 namespace SampleRavenDBApp
@@ -21,6 +23,9 @@ namespace SampleRavenDBApp
 				DefaultDatabase = "Northwind"
 			};
 			store.Initialize();
+			//get all classes from currently executing assembly that derive from a specific superclass and create the corresponding indexes
+			IndexCreation.CreateIndexes(Assembly.GetExecutingAssembly(),store);
+
 			using (var session = store.OpenSession())
 			{
 
