@@ -25,31 +25,36 @@ namespace SampleRavenDBApp
 			store.Initialize();
 			//get all classes from currently executing assembly that derive from a specific superclass and create the corresponding indexes
 			IndexCreation.CreateIndexes(Assembly.GetExecutingAssembly(), store);
-
-
-			using (var session = store.OpenSession())
+			//s:pkey
+			//ravenjobject: json object
+			//mtd: raven metedata
+			//this method executed only for employees
+			//deserialization type for orders is forced in include
+			//perform this at the application root
+			var original = store.Conventions.FindClrType;
+			store.Conventions.FindClrType = (s, obj, mtd) =>
 			{
-				var query = session.Query<dynamic>().Where(d => d.Name);
-			}
-			using (var session = store.OpenSession())
-			{
-								//s:pkey
-				//ravenjobject: json object
-				//mtd: raven metedata
-				//this method executed only for employees
-				//deserialization type for orders is forced in include
-				//perform this at the application root
-				var original = store.Conventions.FindClrType;
-				store.Conventions.FindClrType = (s, obj, mtd) =>
+				if (mtd.Value<string>("Raven-Clr-Type") == "Orders.Employee, Northwind")
 				{
-					if (mtd.Value<string>("Raven-Clr-Type") == "Orders.Employee, Northwind")
-					{
-						return typeof(Employee).AssemblyQualifiedName;
-					}
-					return original(s, obj, mtd);
-				};
+					return typeof(Employee).AssemblyQualifiedName;
+				}
+				return original(s, obj, mtd);
+			};
 
-				
+			using (var session = store.OpenSession())
+			{
+				var query = session.Advanced.LuceneQuery<object>().Where("Name: s*");
+				int uu = 0;
+			}
+
+			
+
+
+			using (var session = store.OpenSession())
+			{
+
+
+
 
 
 				var query =
