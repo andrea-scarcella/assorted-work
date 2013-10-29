@@ -24,7 +24,7 @@ namespace SampleRavenDBApp
 			};
 			store.Initialize();
 			//get all classes from currently executing assembly that derive from a specific superclass and create the corresponding indexes
-			IndexCreation.CreateIndexes(Assembly.GetExecutingAssembly(),store);
+			IndexCreation.CreateIndexes(Assembly.GetExecutingAssembly(), store);
 
 			using (var session = store.OpenSession())
 			{
@@ -38,12 +38,15 @@ namespace SampleRavenDBApp
 				//this method executed only for employees
 				//deserialization type for orders is forced in include
 				//perform this at the application root
-				var original=store.Conventions.FindClrType = (s,obj,mtd)=>{
-					if (mtd.Value<string>("Raven-Clr-Type") == "Orders.Employee, Northwind"){
+				var original = store.Conventions.FindClrType;
+				store.Conventions.FindClrType = (s, obj, mtd) =>
+				{
+					if (mtd.Value<string>("Raven-Clr-Type") == "Orders.Employee, Northwind")
+					{
 						return typeof(Employee).AssemblyQualifiedName;
 					}
-					return original(s,obj,mtd);
-				}
+					return original(s, obj, mtd);
+				};
 
 
 
@@ -82,7 +85,7 @@ namespace SampleRavenDBApp
 				}
 				Console.WriteLine("*");
 
-			
+
 
 
 				var query3 = session.Query<Order>()
@@ -121,22 +124,22 @@ namespace SampleRavenDBApp
 				RavenQueryStatistics stats = null;
 				var query4 = session.Query<Employee>()
 					.Statistics(out stats)//gimme some statistics on my query!
-					.Where(e => e.Lastname.StartsWith("F"))
-					.OrderBy(e=>e.FirstName)
-					.ThenBy(e=>e.LastName);//if sort by freight then generates new index! (freight is decimal therefore not string and therefore does not exist an idex that supports it)
-					//.Take(10);
+					.Where(e => e.LastName.StartsWith("F"))
+					.OrderBy(e => e.FirstName)
+					.ThenBy(e => e.LastName);//if sort by freight then generates new index! (freight is decimal therefore not string and therefore does not exist an idex that supports it)
+				//.Take(10);
 				//copies index into memory and locks it, prevents any modification to index 
 				var enumerable = session.Advanced.Stream(query4);
 
-				while (enumerable.MoveNext())
-				{
-					var emp.enumerable.Current();//server-side forward-only cursor!
-				}
+				//while (enumerable.MoveNext())
+				//{
+				//	var emp.Enumerable.Current();//server-side forward-only cursor!
+				//}
 				int u = 0;
 
 
-				
-				
+
+
 			}
 		}
 	}

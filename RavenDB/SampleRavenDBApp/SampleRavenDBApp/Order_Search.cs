@@ -12,14 +12,15 @@ namespace SampleRavenDBApp
 	{
 		public Order_Search()
 		{
-			this.Map=docs=> 
+			this.Map = docs =>
 				from doc in docs
-				let emp=LoadDocument<Orders.Employee>(doc.Employee)
-				select new{
+				let emp = LoadDocument<Orders.Employee>(doc.Employee)
+				select new
+				{
 					doc.Freight,
-					Employee=emp.FirstName+" " + emp.LastName,
-					EmployeeLastName=emp.LastName
-				}
+					Employee = emp.FirstName + " " + emp.LastName,
+					EmployeeLastName = emp.LastName
+				};
 		}
 	}
 }
