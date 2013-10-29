@@ -23,6 +23,26 @@ namespace SampleRavenDBApp
 			store.Initialize();
 			using (var session = store.OpenSession())
 			{
+
+
+
+
+				//s:pkey
+				//ravenjobject: json object
+				//mtd: raven metedata
+				//this method executed only for employees
+				//deserialization type for orders is forced in include
+				//perform this at the application root
+				var original=store.Conventions.FindClrType = (s,obj,mtd)=>{
+					if (mtd.Value<string>("Raven-Clr-Type") == "Orders.Employee, Northwind"){
+						return typeof(Employee).AssemblyQualifiedName;
+					}
+					return original(s,obj,mtd);
+				}
+
+
+
+
 				var query =
 					session.Query<Employee>()
 					.Where(e => e.FirstName.StartsWith("A"));
@@ -56,6 +76,10 @@ namespace SampleRavenDBApp
 
 				}
 				Console.WriteLine("*");
+
+			
+
+
 				var query3 = session.Query<Order>()
 				.Customize(c =>
 				{
@@ -104,6 +128,10 @@ namespace SampleRavenDBApp
 					var emp.enumerable.Current();//server-side forward-only cursor!
 				}
 				int u = 0;
+
+
+				
+				
 			}
 		}
 	}
