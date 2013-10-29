@@ -40,14 +40,12 @@ namespace SampleRavenDBApp
 				}
 				return original(s, obj, mtd);
 			};
-
 			using (var session = store.OpenSession())
 			{
 				//var query = session.Query<MultiMapSearch>().Where(m => m.Name.StartsWith("s")).As<Object>();
 				//var query = session.Query<Search_byName.MultiMapSearch>().Where(m => m.Name.StartsWith("s")).As<Object>();
 				//var query = session.Advanced.LuceneQuery<object>().Where("Name: s*");
-
-				var query = session.Query<Search_byName.MultiMapSearch>().Where(m => m.Name.StartsWith("s"))
+				var query = session.Query<Search_byName.MultiMapSearch, Search_byName>().Where(m => m.Name.StartsWith("s"))
 					.ProjectFromIndexFieldsInto<Search_byName.MultiMapSearch>();
 
 				int uu = 0;
