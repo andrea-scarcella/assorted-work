@@ -26,13 +26,14 @@ namespace SampleRavenDBApp
 			//get all classes from currently executing assembly that derive from a specific superclass and create the corresponding indexes
 			IndexCreation.CreateIndexes(Assembly.GetExecutingAssembly(), store);
 
+
 			using (var session = store.OpenSession())
 			{
-
-
-
-
-				//s:pkey
+				var query = session.Query<dynamic>().Where(d => d.Name);
+			}
+			using (var session = store.OpenSession())
+			{
+								//s:pkey
 				//ravenjobject: json object
 				//mtd: raven metedata
 				//this method executed only for employees
@@ -48,7 +49,7 @@ namespace SampleRavenDBApp
 					return original(s, obj, mtd);
 				};
 
-
+				
 
 
 				var query =
