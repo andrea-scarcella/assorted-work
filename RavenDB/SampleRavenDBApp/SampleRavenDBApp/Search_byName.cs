@@ -12,7 +12,7 @@ namespace SampleRavenDBApp
 		public class MultiMapSearch
 		{
 			public string Name { get; set; }
-			public dynamic Type { get; set; }
+			public string Type { get; set; }
 		}
 		public Search_byName()
 		{

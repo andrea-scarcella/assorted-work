@@ -48,6 +48,19 @@ namespace SampleRavenDBApp
 				var query = session.Query<Search_byName.MultiMapSearch, Search_byName>().Where(m => m.Name.StartsWith("s"))
 					.ProjectFromIndexFieldsInto<Search_byName.MultiMapSearch>();
 
+				var q2 = session.Query<Search_byName.MultiMapSearch, Search_byName>()
+					.Search(m => m.Name.StartsWith("s"), "search term", escapeQueryOptions: EscapeQueryOptions.AllowAllWildcards)
+					.OrderByScore()
+					.ProjectFromIndexFieldsInto<Search_byName.MultiMapSearch>();
+
+
+				var q3 = session.Query<Search_byName.MultiMapSearch, Search_byName>()
+					.Search(m => m.Name.StartsWith("s"), "s*", boost: 5, escapeQueryOptions: EscapeQueryOptions.AllowAllWildcards)
+					//type is more imporant than name
+					.Search(m => m.Type.StartsWith("s"), "T*", boost: 15, escapeQueryOptions: EscapeQueryOptions.AllowAllWildcards)
+					.OrderByScore()
+					.ProjectFromIndexFieldsInto<Search_byName.MultiMapSearch>();
+
 				int uu = 0;
 			}
 
